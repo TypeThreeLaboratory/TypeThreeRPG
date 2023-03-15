@@ -1,0 +1,2 @@
+# TypeThreeRPG
+3.0式Serverで開発されているRPG用のPaperMC用プラグイン
