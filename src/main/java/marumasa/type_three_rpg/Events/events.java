@@ -2,6 +2,7 @@ package marumasa.type_three_rpg.Events;
 
 import com.github.yannicklamprecht.worldborder.api.WorldBorderApi;
 import io.papermc.paper.event.player.PlayerArmSwingEvent;
+import marumasa.type_three_rpg.DamageDisplay.SummonDamageDisplay;
 import marumasa.type_three_rpg.HealthBar.UndoHealthBar;
 import marumasa.type_three_rpg.HealthBar.UpdateHealthBar;
 import marumasa.type_three_rpg.database;
@@ -159,8 +160,6 @@ public class events implements Listener {
             new UpdateHealthBar(livingEntity, mc).runTaskLater(mc, 0);
 
 
-
-
             //ダメージを受けたエンティティがプレイヤーだったら
             if (livingEntity instanceof Player player) {
 
@@ -237,6 +236,7 @@ public class events implements Listener {
 
         //攻撃されたエンティティが生きているエンティティだったら
         if (event.getEntity() instanceof LivingEntity livingTarget) {
+            double AttackDamage = event.getDamage();
 
             /*Random random = new Random();
             int randomValue = random.nextInt(100);
@@ -249,7 +249,7 @@ public class events implements Listener {
                 //強攻撃ポイント追加
                 PowerAttack.add(livingTarget, mc, 2);
 
-                final double AttackDamage = Attack.calculate(AttackEvent.main(livingAttacker, livingTarget, event.getDamage(), mc));
+                AttackDamage = Attack.calculate(AttackEvent.main(livingAttacker, livingTarget, AttackDamage, mc));
 
                 //攻撃したエンティティの種類を取得
                 final String TypeA = Meta.get(livingAttacker, mc, "Type", "");
@@ -276,6 +276,9 @@ public class events implements Listener {
                     }
                 }
             }
+
+            SummonDamageDisplay.run(livingTarget, AttackDamage, mc);
         }
+
     }
 }

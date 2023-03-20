@@ -17,8 +17,6 @@ public class AttackEvent {
             PlayerAttackEvent.main(player, AttackDamage, mc);
         }
 
-        SummonDamageDisplay.run(target, AttackDamage, mc);
-
         return AttackDamage;
     }
 
