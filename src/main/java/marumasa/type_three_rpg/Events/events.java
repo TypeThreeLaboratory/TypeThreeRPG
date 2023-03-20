@@ -13,12 +13,10 @@ import marumasa.type_three_rpg.entity.player.UpdateRedScreen;
 import marumasa.type_three_rpg.entity.player.mainPlayer;
 import marumasa.type_three_rpg.item.UpdateInventory;
 import marumasa.type_three_rpg.minecraft;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Zombie;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -159,6 +157,9 @@ public class events implements Listener {
 
             //体力バーを更新
             new UpdateHealthBar(livingEntity, mc).runTaskLater(mc, 0);
+
+
+
 
             //ダメージを受けたエンティティがプレイヤーだったら
             if (livingEntity instanceof Player player) {

@@ -4,7 +4,10 @@ import marumasa.type_three_rpg.minecraft;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.TextDisplay;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -13,8 +16,9 @@ public class PlayerAttackEvent {
     public static void main(Player player, double AttackDamage, minecraft mc) {
         subtractRecast(player, 1);
 
-        //攻撃力をプレイヤーに表示
-        player.sendActionBar(Component.text(String.format("§6%.0fダメージ与えた！！", AttackDamage)));
+        //攻撃力をプレイヤーに表示 (削除)
+        //player.sendActionBar(Component.text(String.format("§6%.0fダメージ与えた！！", AttackDamage)));
+
 
         //Attack.EvasiveSlash(player, mc);
     }

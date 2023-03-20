@@ -1,9 +1,9 @@
 package marumasa.type_three_rpg.Events;
 
+import marumasa.type_three_rpg.DamageDisplay.SummonDamageDisplay;
 import marumasa.type_three_rpg.entity.player.Attack;
 import marumasa.type_three_rpg.minecraft;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 
 public class AttackEvent {
     public static double main(LivingEntity attacker, LivingEntity target, double damage, minecraft mc) {
@@ -17,6 +17,7 @@ public class AttackEvent {
             PlayerAttackEvent.main(player, AttackDamage, mc);
         }
 
+        SummonDamageDisplay.run(target, AttackDamage, mc);
 
         return AttackDamage;
     }
