@@ -16,9 +16,6 @@ public class PowerAttack extends BukkitRunnable {
         attack = attackEntity;
         target = targetEntity;
         mc = minecraft;
-
-        //zombie.setAI(false);
-        //new PowerAttack(zombie, livingTarget, mc).runTaskLater(mc, 20);
     }
 
     @Override
