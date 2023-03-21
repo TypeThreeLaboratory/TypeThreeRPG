@@ -5,8 +5,12 @@ import marumasa.type_three_rpg.minecraft;
 import net.kyori.adventure.text.Component;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.entity.Display;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.TextDisplay;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Transformation;
 
 public class UpdateHealthBar extends BukkitRunnable {
 
@@ -20,16 +24,15 @@ public class UpdateHealthBar extends BukkitRunnable {
 
     @Override
     public void run() {
-        final UndoHealthBar undoHealthBar;
-        if (database.ShowHealthBarEntityList.containsKey(target)) {
-            final UndoHealthBar old_UndoHealthBar = database.ShowHealthBarEntityList.get(target);
-            old_UndoHealthBar.cancel();
 
-            undoHealthBar = new UndoHealthBar(target, old_UndoHealthBar.name, old_UndoHealthBar.CustomNameVisible);
-        } else {
-            undoHealthBar = new UndoHealthBar(target, target.getName(), target.isCustomNameVisible());
+        if (target.isDead()) {
+            if (database.ShowHealthBarEntityList.containsKey(target)) {
+                final UndoHealthBar old_UndoHealthBar = database.ShowHealthBarEntityList.get(target);
+                old_UndoHealthBar.cancel();
+                new UndoHealthBar(old_UndoHealthBar.text, target).run();
+            }
+            return;
         }
-
 
         final AttributeInstance MaxHealthAttribute = target.getAttribute(Attribute.GENERIC_MAX_HEALTH);
 
@@ -41,10 +44,66 @@ public class UpdateHealthBar extends BukkitRunnable {
         final StringBuilder name = new StringBuilder("§c▏▏▏▏▏▏▏▏▏▏▏▏▏▏▏▏▏▏▏▏▏▏▏▏▏▏▏▏▏▏§r");
         name.insert((30 * Health / MaxHealth) + 2, "§8");
 
+        final UndoHealthBar undoHealthBar;
+        if (database.ShowHealthBarEntityList.containsKey(target)) {
+
+            final UndoHealthBar old_UndoHealthBar = database.ShowHealthBarEntityList.get(target);
+            old_UndoHealthBar.cancel();
+            old_UndoHealthBar.text.text(Component.text(name.toString()));
+
+            undoHealthBar = new UndoHealthBar(old_UndoHealthBar.text, target);
+
+        } else {
+
+            final TextDisplay textDisplay = (TextDisplay) target.getWorld().spawnEntity(target.getLocation(), EntityType.TEXT_DISPLAY);
+            textDisplay.setBillboard(Display.Billboard.CENTER);
+            textDisplay.setSeeThrough(true);
+            Transformation transformation = textDisplay.getTransformation();
+
+            textDisplay.setTransformation(new Transformation(
+                    transformation.getTranslation().add(0, 0.5f, 0),
+                    transformation.getLeftRotation(),
+                    transformation.getScale(),
+                    transformation.getRightRotation()
+            ));
+
+            undoHealthBar = new UndoHealthBar(textDisplay, target);
+
+            textDisplay.text(Component.text(name.toString()));
+            target.addPassenger(textDisplay);
+        }
         database.ShowHealthBarEntityList.put(target, undoHealthBar);
         undoHealthBar.runTaskLater(mc, 40);
 
-        target.customName(Component.text(name.toString()));
-        target.setCustomNameVisible(true);
+        //database.ShowHealthBarEntityList.put(target, undoHealthBar);
+
+
+
+
+        /*if (entityList.size() != 0 && entityList.get(0) instanceof TextDisplay textDisplay) {
+
+            textDisplay.text(Component.text(name.toString()));
+            final UndoHealthBar old_UndoHealthBar = database.ShowHealthBarEntityList.get(target);
+            if (old_UndoHealthBar == null) return;
+            old_UndoHealthBar.cancel();
+            undoHealthBar = new UndoHealthBar(textDisplay);
+            database.ShowHealthBarEntityList.replace(target, undoHealthBar);
+
+        } else {
+            TextDisplay textDisplay = (TextDisplay) target.getWorld().spawnEntity(target.getLocation(), EntityType.TEXT_DISPLAY);
+            textDisplay.text(Component.text(name.toString()));
+            textDisplay.setBillboard(Display.Billboard.CENTER);
+            textDisplay.setSeeThrough(true);
+
+            //database.ShowHealthBarEntityList.put(target, undoHealthBar);
+            new UndoHealthBar(textDisplay);
+
+            target.addPassenger(textDisplay);
+
+            undoHealthBar = new UndoHealthBar(textDisplay);
+
+            undoHealthBar.runTaskLater(mc, 40);
+            database.ShowHealthBarEntityList.put(target, undoHealthBar);
+        }*/
     }
 }

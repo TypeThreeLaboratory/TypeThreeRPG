@@ -3,7 +3,6 @@ package marumasa.type_three_rpg.Events;
 import com.github.yannicklamprecht.worldborder.api.WorldBorderApi;
 import io.papermc.paper.event.player.PlayerArmSwingEvent;
 import marumasa.type_three_rpg.DamageDisplay.SummonDamageDisplay;
-import marumasa.type_three_rpg.HealthBar.UndoHealthBar;
 import marumasa.type_three_rpg.HealthBar.UpdateHealthBar;
 import marumasa.type_three_rpg.database;
 import marumasa.type_three_rpg.entity.PowerAttack;
@@ -14,10 +13,12 @@ import marumasa.type_three_rpg.entity.player.UpdateRedScreen;
 import marumasa.type_three_rpg.entity.player.mainPlayer;
 import marumasa.type_three_rpg.item.UpdateInventory;
 import marumasa.type_three_rpg.minecraft;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -159,6 +160,14 @@ public class events implements Listener {
             //体力バーを更新
             new UpdateHealthBar(livingEntity, mc).runTaskLater(mc, 0);
 
+            /*final List<Entity> entity = livingEntity.getPassengers();
+            for (Entity en : entity) {
+                logger.info(String.valueOf(en));
+            }*/
+
+
+            //livingEntity.addPassenger();
+
 
             //ダメージを受けたエンティティがプレイヤーだったら
             if (livingEntity instanceof Player player) {
@@ -268,13 +277,13 @@ public class events implements Listener {
                 }
 
                 //もし攻撃されたエンティティの体力が与えられたダメージより多かったら
-                if (livingTarget.getHealth() - AttackDamage <= 0) {
+               /* if (livingTarget.getHealth() - AttackDamage <= 0) {
                     if (database.ShowHealthBarEntityList.containsKey(livingAttacker)) {
                         final UndoHealthBar old_UndoHealthBar = database.ShowHealthBarEntityList.get(livingAttacker);
                         old_UndoHealthBar.cancel();
                         new UndoHealthBar(livingAttacker, old_UndoHealthBar.name, old_UndoHealthBar.CustomNameVisible).run();
                     }
-                }
+                }*/
             }
 
             SummonDamageDisplay.run(livingTarget, AttackDamage, mc);

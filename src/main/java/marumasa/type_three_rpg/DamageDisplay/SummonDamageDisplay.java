@@ -1,5 +1,6 @@
 package marumasa.type_three_rpg.DamageDisplay;
 
+import marumasa.type_three_rpg.database;
 import marumasa.type_three_rpg.minecraft;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Display;
@@ -17,6 +18,8 @@ public class SummonDamageDisplay {
         textDisplay.setBillboard(Display.Billboard.CENTER);
         textDisplay.setSeeThrough(true);
 
-        new RemoveDamageDisplay(textDisplay).runTaskLater(mc, 10);
+        RemoveDamageDisplay removeDamageDisplay = new RemoveDamageDisplay(textDisplay);
+        removeDamageDisplay.runTaskLater(mc, 10);
+        database.DamageDisplayList.put(textDisplay, removeDamageDisplay);
     }
 }
