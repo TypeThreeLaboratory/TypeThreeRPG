@@ -29,6 +29,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.event.world.EntitiesLoadEvent;
+import org.bukkit.event.world.EntitiesUnloadEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.SmithingInventory;
@@ -97,7 +98,7 @@ public class events implements Listener {
 
     @EventHandler
     public void onEntityLoad(EntitiesLoadEvent event) {
-        //エンティティが読み込まれたら
+        //エンティティがロードされたら
         for (Entity entity : event.getEntities()) {
             if (entity instanceof LivingEntity livingEntity) {
                 if (livingEntity instanceof Zombie zombie) {
@@ -106,9 +107,26 @@ public class events implements Listener {
                         Meta.get(livingEntity, mc, "Type", "鍾乳石ゾンビ");
                     }
                 }
-
             }
 
+
+            final Set<String> tags = entity.getScoreboardTags();
+            for (final String tag : tags)
+                switch (tag) {
+                    case "HealthBar", "DamageDisplay" -> {
+                        entity.remove();
+                        return;
+                    }
+                    default -> {
+                    }
+                }
+        }
+    }
+
+    @EventHandler
+    public void onEntityLoad(EntitiesUnloadEvent event) {
+        //エンティティがアンロードされたら
+        for (Entity entity : event.getEntities()) {
 
             final Set<String> tags = entity.getScoreboardTags();
             for (final String tag : tags)
