@@ -17,6 +17,7 @@ public class SummonDamageDisplay {
         textDisplay.text(Component.text(String.format("%.0f", damage)));
         textDisplay.setBillboard(Display.Billboard.CENTER);
         textDisplay.setSeeThrough(true);
+        textDisplay.addScoreboardTag("DamageDisplay");
 
         RemoveDamageDisplay removeDamageDisplay = new RemoveDamageDisplay(textDisplay);
         removeDamageDisplay.runTaskLater(mc, 10);

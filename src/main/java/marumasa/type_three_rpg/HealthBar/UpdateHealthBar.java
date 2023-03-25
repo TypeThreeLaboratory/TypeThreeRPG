@@ -55,22 +55,9 @@ public class UpdateHealthBar extends BukkitRunnable {
 
         } else {
 
-            final TextDisplay textDisplay = (TextDisplay) target.getWorld().spawnEntity(target.getLocation(), EntityType.TEXT_DISPLAY);
-            textDisplay.setBillboard(Display.Billboard.CENTER);
-            textDisplay.setSeeThrough(true);
-            Transformation transformation = textDisplay.getTransformation();
 
-            textDisplay.setTransformation(new Transformation(
-                    transformation.getTranslation().add(0, 0.5f, 0),
-                    transformation.getLeftRotation(),
-                    transformation.getScale(),
-                    transformation.getRightRotation()
-            ));
+            undoHealthBar = new UndoHealthBar(SummonHealthBar.run(target, name.toString(), mc), target);
 
-            undoHealthBar = new UndoHealthBar(textDisplay, target);
-
-            textDisplay.text(Component.text(name.toString()));
-            target.addPassenger(textDisplay);
         }
         database.ShowHealthBarEntityList.put(target, undoHealthBar);
         undoHealthBar.runTaskLater(mc, 40);

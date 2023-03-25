@@ -34,6 +34,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.SmithingInventory;
 
 import java.util.Objects;
+import java.util.Set;
 import java.util.logging.Logger;
 
 public class events implements Listener {
@@ -105,7 +106,20 @@ public class events implements Listener {
                         Meta.get(livingEntity, mc, "Type", "鍾乳石ゾンビ");
                     }
                 }
+
             }
+
+
+            final Set<String> tags = entity.getScoreboardTags();
+            for (final String tag : tags)
+                switch (tag) {
+                    case "HealthBar", "DamageDisplay" -> {
+                        entity.remove();
+                        return;
+                    }
+                    default -> {
+                    }
+                }
         }
     }
 
