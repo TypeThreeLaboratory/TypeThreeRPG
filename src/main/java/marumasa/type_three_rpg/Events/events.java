@@ -258,7 +258,7 @@ public class events implements Listener {
                 //強攻撃ポイント追加
                 PowerAttack.add(livingTarget, mc, 2);
 
-                AttackDamage = Attack.calculate(AttackEvent.main(livingAttacker, livingTarget, AttackDamage, mc));
+                AttackDamage = AttackEvent.main(livingAttacker, livingTarget, AttackDamage, mc);
 
                 //攻撃したエンティティの種類を取得
                 final String TypeA = Meta.get(livingAttacker, mc, "Type", "");

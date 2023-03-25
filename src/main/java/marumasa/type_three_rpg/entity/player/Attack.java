@@ -12,8 +12,8 @@ import java.util.Objects;
 public class Attack {
     public static double calculate(double DefaultDamage) {
 
-        double MaxDamage = DefaultDamage * 1.5;
-        double MinDamage = DefaultDamage * 0.5;
+        double MaxDamage = DefaultDamage * 1.25;
+        double MinDamage = DefaultDamage * 0.75;
 
         return Math.ceil((Math.random() * (MaxDamage - MinDamage)) + MinDamage);
     }
