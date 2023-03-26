@@ -4,6 +4,7 @@ import com.github.yannicklamprecht.worldborder.api.WorldBorderApi;
 import io.papermc.paper.event.player.PlayerArmSwingEvent;
 import marumasa.type_three_rpg.DamageDisplay.SummonDamageDisplay;
 import marumasa.type_three_rpg.HealthBar.UpdateHealthBar;
+import marumasa.type_three_rpg.config.config;
 import marumasa.type_three_rpg.database;
 import marumasa.type_three_rpg.entity.PowerAttack;
 import marumasa.type_three_rpg.entity.dripstone_zombie.dripstone_zombie;
@@ -42,10 +43,12 @@ public class events implements Listener {
 
     private final Logger logger = Bukkit.getLogger();
     private final minecraft mc;
+    private final config cfg;
     private final WorldBorderApi worldBorderApi;
 
-    public events(minecraft data, WorldBorderApi worldBorderAPI) {
+    public events(config config, minecraft data, WorldBorderApi worldBorderAPI) {
         mc = data;
+        cfg = config;
         worldBorderApi = worldBorderAPI;
     }
 
@@ -108,36 +111,29 @@ public class events implements Listener {
                     }
                 }
             }
+            remove(entity);
 
-
-            final Set<String> tags = entity.getScoreboardTags();
-            for (final String tag : tags)
-                switch (tag) {
-                    case "HealthBar", "DamageDisplay" -> {
-                        entity.remove();
-                        return;
-                    }
-                    default -> {
-                    }
-                }
         }
+    }
+
+    private void remove(Entity entity) {
+        final Set<String> tags = entity.getScoreboardTags();
+        for (final String tag : tags)
+            switch (tag) {
+                case "HealthBar", "DamageDisplay" -> {
+                    entity.remove();
+                    return;
+                }
+                default -> {
+                }
+            }
     }
 
     @EventHandler
     public void onEntityLoad(EntitiesUnloadEvent event) {
         //エンティティがアンロードされたら
         for (Entity entity : event.getEntities()) {
-
-            final Set<String> tags = entity.getScoreboardTags();
-            for (final String tag : tags)
-                switch (tag) {
-                    case "HealthBar", "DamageDisplay" -> {
-                        entity.remove();
-                        return;
-                    }
-                    default -> {
-                    }
-                }
+            remove(entity);
         }
     }
 
@@ -190,7 +186,7 @@ public class events implements Listener {
         if (event.getEntity() instanceof LivingEntity livingEntity) {
 
             //体力バーを更新
-            new UpdateHealthBar(livingEntity, mc).runTaskLater(mc, 0);
+            new UpdateHealthBar(livingEntity, cfg, mc).runTaskLater(mc, 0);
 
             /*final List<Entity> entity = livingEntity.getPassengers();
             for (Entity en : entity) {
@@ -318,7 +314,7 @@ public class events implements Listener {
                 }*/
             }
 
-            SummonDamageDisplay.run(livingTarget, AttackDamage, mc);
+            SummonDamageDisplay.run(livingTarget, AttackDamage, cfg, mc);
         }
 
     }

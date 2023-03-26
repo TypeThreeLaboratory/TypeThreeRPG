@@ -2,6 +2,7 @@ package marumasa.type_three_rpg;
 
 import com.github.yannicklamprecht.worldborder.api.WorldBorderApi;
 import marumasa.type_three_rpg.Events.events;
+import marumasa.type_three_rpg.config.config;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -28,7 +29,7 @@ public final class minecraft extends JavaPlugin {
         }
 
         final WorldBorderApi worldBorderApi = worldBorderApiRegisteredServiceProvider.getProvider();
-        server.getPluginManager().registerEvents(new events(this, worldBorderApi), this);
+        server.getPluginManager().registerEvents(new events(config, this, worldBorderApi), this);
 
     }
 

@@ -1,24 +1,23 @@
 package marumasa.type_three_rpg.HealthBar;
 
+import marumasa.type_three_rpg.config.config;
 import marumasa.type_three_rpg.database;
 import marumasa.type_three_rpg.minecraft;
 import net.kyori.adventure.text.Component;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
-import org.bukkit.entity.Display;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.TextDisplay;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.Transformation;
 
 public class UpdateHealthBar extends BukkitRunnable {
 
     private final LivingEntity target;
+    private final config cfg;
     private final minecraft mc;
 
-    public UpdateHealthBar(LivingEntity entity, minecraft minecraft) {
+    public UpdateHealthBar(LivingEntity entity, config config, minecraft minecraft) {
         target = entity;
+        cfg = config;
         mc = minecraft;
     }
 
@@ -55,8 +54,7 @@ public class UpdateHealthBar extends BukkitRunnable {
 
         } else {
 
-
-            undoHealthBar = new UndoHealthBar(SummonHealthBar.run(target, name.toString(), mc), target);
+            undoHealthBar = new UndoHealthBar(SummonHealthBar.run(target, name.toString(), cfg, mc), target);
 
         }
         database.ShowHealthBarEntityList.put(target, undoHealthBar);
