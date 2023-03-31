@@ -94,7 +94,6 @@ public class events implements Listener {
     public void onProjectileLaunch(ProjectileLaunchEvent event) {
         //Projectile が発射された場合
 
-        logger.info("test");
         Projectile projectile = event.getEntity();
         projectile.setVelocity(projectile.getVelocity().multiply(1.5));
     }
