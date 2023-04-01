@@ -4,14 +4,6 @@ import marumasa.type_three_rpg.minecraft;
 import org.bukkit.entity.Player;
 
 public class mainPlayer {
-    public int hitPoint = 20;
-
-    public int physicalAttack = 5;
-    public int magicAttack = 5;
-
-    public int physicalDefense = 5;
-    public int magicDefense = 5;
-
     public static void setSkillSlot(Player player, minecraft mc) {
 
 
