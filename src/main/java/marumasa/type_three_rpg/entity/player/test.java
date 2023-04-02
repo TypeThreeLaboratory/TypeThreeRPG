@@ -13,6 +13,6 @@ public class test extends BukkitRunnable {
     @Override
     public void run() {
         effect.EvasionUp -= 100;
-        Bukkit.getLogger().info("grttt5r4t4r");
+        Bukkit.getLogger().info("test");
     }
 }

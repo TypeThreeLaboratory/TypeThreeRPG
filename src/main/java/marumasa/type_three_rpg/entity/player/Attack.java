@@ -1,6 +1,5 @@
 package marumasa.type_three_rpg.entity.player;
 
-import marumasa.type_three_rpg.entity.meta.Meta;
 import marumasa.type_three_rpg.minecraft;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -28,7 +27,7 @@ public class Attack {
         final ItemStack itemStack = inventory.getItemInMainHand();
         final Material material = itemStack.getType();
 
-        final String skill = Meta.get(player, mc, "skill", "");
+        final String skill = "";
         if (Objects.equals(skill, "回避斬り")) {
             if (material == Material.WOODEN_SWORD ||
                     material == Material.STONE_SWORD ||
@@ -38,7 +37,7 @@ public class Attack {
                     material == Material.NETHERITE_SWORD) {
 
                 player.sendMessage("§6回避斬り発動！！");
-                Meta.set(player, mc, "skill", "");
+                //Meta.set(player, mc, "skill", "");
 
                 player.setVelocity(
                         player.getLocation().getDirection().multiply(-0.7)

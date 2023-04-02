@@ -1,15 +1,21 @@
 package marumasa.type_three_rpg.entity;
 
-import marumasa.type_three_rpg.entity.meta.Meta;
-import marumasa.type_three_rpg.minecraft;
+import marumasa.type_three_rpg.database;
 import org.bukkit.entity.LivingEntity;
 
 public class PowerAttack {
-    public static int add(LivingEntity entity, minecraft mc, int value) {
-       return Meta.set(entity, mc, "PowerAttackPoint", Meta.get(entity, mc, "PowerAttackPoint", 0) + value);
+    public static void add(LivingEntity entity, int value) {
+        final EntityData entityData = database.EntityData.get(entity);
+        if (entityData == null) {
+            database.EntityData.put(entity, new EntityData(entity));
+            return;
+        }
+        final int powerAttackPoint = entityData.getPowerAttackPoint() + value;
+        entityData.setPowerAttackPoint(powerAttackPoint);
     }
 
-    public static void set(LivingEntity entity, minecraft mc, int value) {
-        Meta.set(entity, mc, "PowerAttackPoint", value);
+    public static void set(LivingEntity entity, int value) {
+        final EntityData entityData = database.EntityData.get(entity);
+        entityData.setPowerAttackPoint(value);
     }
 }

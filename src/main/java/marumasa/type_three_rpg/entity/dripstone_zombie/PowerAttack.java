@@ -25,7 +25,7 @@ public class PowerAttack extends BukkitRunnable {
         attack.setVelocity(target.getLocation().clone().add(0, -0.2, 0).toVector().subtract(attack.getLocation().toVector()).multiply(0.8));
 
         target.setVelocity(attack.getLocation().clone().add(0, -0.2, 0).toVector().subtract(target.getLocation().toVector()).multiply(-0.8));
-        marumasa.type_three_rpg.entity.PowerAttack.set(attack, mc, 0);
+        marumasa.type_three_rpg.entity.PowerAttack.set(attack, 0);
         attack.setAI(true);
 
         target.damage(5, attack);

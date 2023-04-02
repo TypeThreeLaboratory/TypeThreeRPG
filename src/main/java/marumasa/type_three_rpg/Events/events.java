@@ -2,15 +2,15 @@ package marumasa.type_three_rpg.Events;
 
 import com.github.yannicklamprecht.worldborder.api.WorldBorderApi;
 import io.papermc.paper.event.player.PlayerArmSwingEvent;
-import marumasa.type_three_rpg.config.config;
+import marumasa.type_three_rpg.config.Config;
 import marumasa.type_three_rpg.database;
 import marumasa.type_three_rpg.entity.PowerAttack;
-import marumasa.type_three_rpg.entity.dripstone_zombie.dripstone_zombie;
-import marumasa.type_three_rpg.entity.meta.Meta;
+import marumasa.type_three_rpg.entity.player.PlayerData;
 import marumasa.type_three_rpg.entity.player.UpdateRedScreen;
 import marumasa.type_three_rpg.entity.player.mainPlayer;
 import marumasa.type_three_rpg.item.UpdateInventory;
 import marumasa.type_three_rpg.minecraft;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.*;
@@ -18,6 +18,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.event.world.EntitiesLoadEvent;
@@ -25,7 +26,10 @@ import org.bukkit.event.world.EntitiesUnloadEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.SmithingInventory;
+import org.bukkit.inventory.meta.SkullMeta;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -34,10 +38,10 @@ public class events implements Listener {
 
     private final Logger logger = Bukkit.getLogger();
     private final minecraft mc;
-    private final config cfg;
+    private final Config cfg;
     private final WorldBorderApi worldBorderApi;
 
-    public events(config config, minecraft data, WorldBorderApi worldBorderAPI) {
+    public events(Config config, minecraft data, WorldBorderApi worldBorderAPI) {
         mc = data;
         cfg = config;
         worldBorderApi = worldBorderAPI;
@@ -95,7 +99,16 @@ public class events implements Listener {
         //Projectile が発射された場合
 
         Projectile projectile = event.getEntity();
-        projectile.setVelocity(projectile.getVelocity().multiply(1.5));
+
+        if (projectile.getShooter() instanceof Player player) {
+
+            final PlayerData playerData = database.PlayerData.get(player);
+            if (Objects.equals(playerData.role, cfg.role.pharmacist)) {
+
+            }
+
+            projectile.setVelocity(projectile.getVelocity().multiply(1.5));
+        }
     }
 
     @EventHandler
@@ -106,13 +119,19 @@ public class events implements Listener {
                 if (livingEntity instanceof Zombie zombie) {
                     final String name = zombie.getName();
                     if (name.contains("鍾乳石ゾンビ")) {
-                        Meta.get(livingEntity, mc, "Type", "鍾乳石ゾンビ");
+                        //Meta.get(livingEntity, mc, "Type", "鍾乳石ゾンビ");
                     }
                 }
             }
             remove(entity);
 
         }
+    }
+
+    private PlayerData getPlayerData(Player player) {
+        final PlayerData playerData = database.PlayerData.get(player);
+        if (playerData.role == null) return null;
+        return playerData;
     }
 
     private void remove(Entity entity) {
@@ -143,7 +162,7 @@ public class events implements Listener {
             if (livingEntity instanceof Zombie zombie) {
                 final String name = zombie.getName();
                 if (name.contains("鍾乳石ゾンビ")) {
-                    Meta.get(livingEntity, mc, "Type", "鍾乳石ゾンビ");
+                    //Meta.get(livingEntity, mc, "Type", "鍾乳石ゾンビ");
                 }
             }
         }
@@ -155,14 +174,38 @@ public class events implements Listener {
 
         final Player player = event.getPlayer();
 
-        Meta.set(player, mc, "role", "剣闘士");
 
         //レッドスクリーンを更新
         if (!database.ShowRedScreenPlayerList.containsKey(player)) {
             new UpdateRedScreen(player, worldBorderApi, mc).runTaskTimer(mc, 0, 30);
         }
 
+        database.PlayerData.put(player, new PlayerData(player, cfg));
+
         mainPlayer.setSkillSlot(player, mc);
+
+        final Inventory inventory = player.getInventory();
+        final PlayerData playerData = database.PlayerData.get(player);
+        if (playerData == null) return;
+
+        final ItemStack itemStack = new ItemStack(Material.PLAYER_HEAD);
+        final SkullMeta skullMeta = (SkullMeta) itemStack.getItemMeta();
+
+        skullMeta.setOwningPlayer(player);
+        skullMeta.displayName(Component.text("§gクリックしてメニューを表示"));
+
+        itemStack.setItemMeta(skullMeta);
+
+        List<Component> text = new ArrayList<>();
+
+        text.add(Component.text("役職:" + playerData.role));
+        text.add(Component.text("レベル:" + playerData.getLevel()));
+        text.add(Component.text("体力:" + playerData.getHitPoint()));
+        text.add(Component.text("防御力:" + playerData.getPhysicalDefense()));
+
+        itemStack.lore(text);
+
+        inventory.setItem(9, itemStack);
     }
 
     @EventHandler
@@ -176,7 +219,35 @@ public class events implements Listener {
             new UpdateRedScreen(player, worldBorderApi, mc).runTaskTimer(mc, 0, 30);
         }
 
-        mainPlayer.setSkillSlot(player, mc);
+
+        final Inventory inventory = player.getInventory();
+        final PlayerData playerData = database.PlayerData.get(player);
+        if (playerData == null) return;
+
+        final ItemStack itemStack = new ItemStack(Material.PLAYER_HEAD);
+        final SkullMeta skullMeta = (SkullMeta) itemStack.getItemMeta();
+
+        skullMeta.setOwningPlayer(player);
+        skullMeta.displayName(Component.text("§gクリックしてメニューを表示"));
+
+        itemStack.setItemMeta(skullMeta);
+
+        List<Component> text = new ArrayList<>();
+
+        text.add(Component.text("役職:" + playerData.role));
+        text.add(Component.text("レベル:" + playerData.getLevel()));
+        text.add(Component.text("体力:" + playerData.getHitPoint()));
+        text.add(Component.text("防御力:" + playerData.getPhysicalDefense()));
+
+        itemStack.lore(text);
+
+        inventory.setItem(9, itemStack);
+
+        //mainPlayer.setSkillSlot(player, mc);
+    }
+
+    @EventHandler
+    public void onOpen(InventoryOpenEvent event) {
     }
 
     @EventHandler
@@ -231,8 +302,8 @@ public class events implements Listener {
         //プレイヤーがアイテムを捨てたら
 
         final Player player = event.getPlayer();
-
-        if (Objects.equals(Meta.get(player, mc, "role", ""), "")) return;
+        final PlayerData playerData = database.PlayerData.get(player);
+        if (playerData.role == null) return;
 
         final ItemStack itemStack = event.getItemDrop().getItemStack();
         if (itemStack.getType() == Material.BOOK) {
@@ -271,10 +342,11 @@ public class events implements Listener {
             if (event.getDamager() instanceof LivingEntity livingAttacker) {
 
                 //強攻撃ポイント追加
-                PowerAttack.add(livingTarget, mc, 2);
+                PowerAttack.add(livingTarget, 2);
 
                 AttackDamage = AttackEvent.main(livingAttacker, livingTarget, AttackDamage, mc);
 
+                /*
                 //攻撃したエンティティの種類を取得
                 final String TypeA = Meta.get(livingAttacker, mc, "Type", "");
 
@@ -289,16 +361,9 @@ public class events implements Listener {
                 //もし攻撃されたエンティティの種類が鍾乳石ゾンビだったら
                 if (Objects.equals(TypeT, "鍾乳石ゾンビ")) {
                     dripstone_zombie.Damage((Zombie) livingTarget, mc);
-                }
-
-                //もし攻撃されたエンティティの体力が与えられたダメージより多かったら
-               /* if (livingTarget.getHealth() - AttackDamage <= 0) {
-                    if (database.ShowHealthBarEntityList.containsKey(livingAttacker)) {
-                        final UndoHealthBar old_UndoHealthBar = database.ShowHealthBarEntityList.get(livingAttacker);
-                        old_UndoHealthBar.cancel();
-                        new UndoHealthBar(livingAttacker, old_UndoHealthBar.name, old_UndoHealthBar.CustomNameVisible).run();
-                    }
                 }*/
+
+                event.setDamage(AttackDamage);
             }
         }
     }

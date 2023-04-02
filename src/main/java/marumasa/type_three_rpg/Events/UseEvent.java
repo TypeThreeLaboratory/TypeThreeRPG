@@ -1,8 +1,5 @@
 package marumasa.type_three_rpg.Events;
 
-import marumasa.type_three_rpg.entity.meta.Meta;
-import marumasa.type_three_rpg.entity.player.StatusEffect;
-import marumasa.type_three_rpg.entity.player.test;
 import marumasa.type_three_rpg.minecraft;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
@@ -52,9 +49,9 @@ public class UseEvent {
                         player.sendMessage("§aスキル発動！ 1秒間 回避率100%プラス");
 
 
-                        final StatusEffect StatusEffect = Meta.get(player, mc, "StatusEffect", new StatusEffect());
-                        StatusEffect.EvasionUp += 100;
-                        new test(StatusEffect).runTaskLater(mc, 20);
+                        //final StatusEffect StatusEffect = Meta.get(player, mc, "StatusEffect", new StatusEffect());
+                        //StatusEffect.EvasionUp += 100;
+                        //new test(StatusEffect).runTaskLater(mc, 20);
 
 
                         player.setVelocity(

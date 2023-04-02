@@ -2,7 +2,7 @@ package marumasa.type_three_rpg;
 
 import com.github.yannicklamprecht.worldborder.api.WorldBorderApi;
 import marumasa.type_three_rpg.Events.events;
-import marumasa.type_three_rpg.config.config;
+import marumasa.type_three_rpg.config.Config;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -16,7 +16,7 @@ public final class minecraft extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        config config = new config(this);
+        Config config = new Config(this);
 
 
         final Server server = getServer();
