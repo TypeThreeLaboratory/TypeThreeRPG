@@ -37,7 +37,7 @@ public class UpdateRedScreen extends BukkitRunnable {
             database.ShowRedScreenPlayerList.remove(pl);
             this.cancel();
         } else {
-            wbApi.sendRedScreenForSeconds(pl, 1, mc);
+            //wbApi.sendRedScreenForSeconds(pl, 1, mc);
         }
     }
 }

@@ -10,6 +10,6 @@ import java.util.Map;
 
 public class database {
     public static final Map<Player, UpdateRedScreen> ShowRedScreenPlayerList = new HashMap<>();
-    public static final Map<Player, marumasa.type_three_rpg.entity.player.PlayerData> PlayerData = new HashMap<>();
+    public static final Map<Player, marumasa.type_three_rpg.entity.player.PlayerData> PlayerDataList = new HashMap<>();
     public static final Map<Entity, EntityData> EntityData = new HashMap<>();
 }
