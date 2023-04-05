@@ -5,10 +5,12 @@ import io.papermc.paper.event.player.PlayerArmSwingEvent;
 import marumasa.type_three_rpg.config.Config;
 import marumasa.type_three_rpg.database;
 import marumasa.type_three_rpg.entity.PowerAttack;
+import marumasa.type_three_rpg.entity.base;
 import marumasa.type_three_rpg.entity.player.MenuOpen;
 import marumasa.type_three_rpg.entity.player.PlayerData;
 import marumasa.type_three_rpg.entity.player.UpdateRedScreen;
 import marumasa.type_three_rpg.entity.player.mainPlayer;
+import marumasa.type_three_rpg.entity.target_dummy;
 import marumasa.type_three_rpg.item.UpdateInventory;
 import marumasa.type_three_rpg.minecraft;
 import org.bukkit.Bukkit;
@@ -172,8 +174,14 @@ public class events implements Listener {
             if (livingEntity instanceof Zombie zombie) {
                 final String name = zombie.getName();
                 if (name.contains("鍾乳石ゾンビ")) {
+                    logger.info("test");
                     //Meta.get(livingEntity, mc, "Type", "鍾乳石ゾンビ");
                 }
+            }
+            if (livingEntity instanceof Husk husk) {
+                //new base(husk, 1, 2, mc);
+                new target_dummy(husk, 1, 2, mc);
+                logger.info("test2");
             }
         }
     }
@@ -327,9 +335,12 @@ public class events implements Listener {
                 if (Objects.equals(TypeT, "鍾乳石ゾンビ")) {
                     dripstone_zombie.Damage((Zombie) livingTarget, mc);
                 }*/
-
                 event.setDamage(AttackDamage);
             }
+        }
+        final LivingEntity entity = database.EntityDamageLink.get(event.getEntity());
+        if (entity != null) {
+            ((Player) event.getDamager()).attack(entity);
         }
     }
 }
