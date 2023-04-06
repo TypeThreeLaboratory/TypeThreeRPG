@@ -2,7 +2,7 @@ package marumasa.type_three_rpg.entity.player;
 
 import com.github.yannicklamprecht.worldborder.api.WorldBorderApi;
 import marumasa.type_three_rpg.database;
-import marumasa.type_three_rpg.minecraft;
+import marumasa.type_three_rpg.Minecraft;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Player;
@@ -11,9 +11,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class UpdateRedScreen extends BukkitRunnable {
     final Player pl;
     final WorldBorderApi wbApi;
-    final minecraft mc;
+    final Minecraft mc;
 
-    public UpdateRedScreen(Player player, WorldBorderApi worldBorderApi, minecraft minecraft) {
+    public UpdateRedScreen(Player player, WorldBorderApi worldBorderApi, Minecraft minecraft) {
 
         pl = player;
         wbApi = worldBorderApi;

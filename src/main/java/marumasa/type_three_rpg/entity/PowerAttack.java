@@ -4,7 +4,7 @@ import marumasa.type_three_rpg.database;
 import org.bukkit.entity.LivingEntity;
 
 public class PowerAttack {
-    public static void add(LivingEntity entity, int value) {
+    /*public static void add(LivingEntity entity, int value) {
         final EntityData entityData = database.EntityData.get(entity);
         if (entityData == null) {
             database.EntityData.put(entity, new EntityData(entity));
@@ -17,5 +17,5 @@ public class PowerAttack {
     public static void set(LivingEntity entity, int value) {
         final EntityData entityData = database.EntityData.get(entity);
         entityData.setPowerAttackPoint(value);
-    }
+    }*/
 }

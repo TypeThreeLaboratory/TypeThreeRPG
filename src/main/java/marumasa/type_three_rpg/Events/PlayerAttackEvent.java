@@ -1,6 +1,6 @@
 package marumasa.type_three_rpg.Events;
 
-import marumasa.type_three_rpg.minecraft;
+import marumasa.type_three_rpg.Minecraft;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class PlayerAttackEvent {
-    public static void main(Player player, double AttackDamage, minecraft mc) {
+    public static void main(Player player, double AttackDamage, Minecraft mc) {
         subtractRecast(player, 1);
     }
 
@@ -28,7 +28,7 @@ public class PlayerAttackEvent {
                     itemMeta.addEnchant(Enchantment.DURABILITY, 1, true);
                     itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                     itemStack.setItemMeta(itemMeta);
-                    player.sendMessage("§6スキル使用可能になりました");
+                    //player.sendMessage("§6スキル使用可能になりました");
                     itemStack.setAmount(1);
 
                 } else {

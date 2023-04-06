@@ -1,12 +1,14 @@
 package marumasa.type_three_rpg.entity;
 
 import marumasa.type_three_rpg.database;
-import marumasa.type_three_rpg.minecraft;
-import org.bukkit.Bukkit;
+import marumasa.type_three_rpg.Minecraft;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.entity.*;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Husk;
+import org.bukkit.entity.Interaction;
+import org.bukkit.entity.ItemDisplay;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
@@ -14,7 +16,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Transformation;
 
-public class base extends EntityData {
+public class ttttt extends EntityData {
 
     private final Husk entity;
 
@@ -23,7 +25,7 @@ public class base extends EntityData {
     private final ItemDisplay itemDisplay;
     private final tick tick;
 
-    public base(Husk husk, float height, float width, minecraft minecraft) {
+    public ttttt(Husk husk, float height, float width, Minecraft minecraft) {
         super(husk);
 
         entity = husk;

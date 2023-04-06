@@ -1,6 +1,6 @@
 package marumasa.type_three_rpg.entity.dripstone_zombie;
 
-import marumasa.type_three_rpg.minecraft;
+import marumasa.type_three_rpg.Minecraft;
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.EntityEquipment;
@@ -10,9 +10,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class PowerAttack extends BukkitRunnable {
     private final LivingEntity attack;
     private final LivingEntity target;
-    private final minecraft mc;
+    private final Minecraft mc;
 
-    public PowerAttack(LivingEntity attackEntity, LivingEntity targetEntity, minecraft minecraft) {
+    public PowerAttack(LivingEntity attackEntity, LivingEntity targetEntity, Minecraft minecraft) {
         attack = attackEntity;
         target = targetEntity;
         mc = minecraft;
@@ -25,7 +25,7 @@ public class PowerAttack extends BukkitRunnable {
         attack.setVelocity(target.getLocation().clone().add(0, -0.2, 0).toVector().subtract(attack.getLocation().toVector()).multiply(0.8));
 
         target.setVelocity(attack.getLocation().clone().add(0, -0.2, 0).toVector().subtract(target.getLocation().toVector()).multiply(-0.8));
-        marumasa.type_three_rpg.entity.PowerAttack.set(attack, 0);
+        //marumasa.type_three_rpg.entity.PowerAttack.set(attack, 0);
         attack.setAI(true);
 
         target.damage(5, attack);

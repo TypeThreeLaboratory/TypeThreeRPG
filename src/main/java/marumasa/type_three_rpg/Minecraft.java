@@ -10,7 +10,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.logging.Logger;
 
-public final class minecraft extends JavaPlugin {
+public final class Minecraft extends JavaPlugin {
 
     private final Logger logger = Bukkit.getLogger();
 

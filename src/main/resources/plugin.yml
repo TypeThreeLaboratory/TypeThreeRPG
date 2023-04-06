@@ -1,6 +1,6 @@
 name: Type3-RPG
 version: '${version}'
-main: marumasa.type_three_rpg.minecraft
+main: marumasa.type_three_rpg.Minecraft
 api-version: 1.19
 
 softdepend: [WorldBorderAPI]

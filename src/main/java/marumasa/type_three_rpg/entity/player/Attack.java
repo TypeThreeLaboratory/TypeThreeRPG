@@ -1,6 +1,6 @@
 package marumasa.type_three_rpg.entity.player;
 
-import marumasa.type_three_rpg.minecraft;
+import marumasa.type_three_rpg.Minecraft;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -21,7 +21,7 @@ public class Attack {
         return Math.ceil((Math.random() * (MaxDamage - MinDamage)) + MinDamage);
     }
 
-    public static void EvasiveSlash(Player player, minecraft mc) {
+    public static void EvasiveSlash(Player player, Minecraft mc) {
 
         final PlayerInventory inventory = player.getInventory();
         final ItemStack itemStack = inventory.getItemInMainHand();

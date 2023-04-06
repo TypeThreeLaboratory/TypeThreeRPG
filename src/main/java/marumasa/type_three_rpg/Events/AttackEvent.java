@@ -1,12 +1,12 @@
 package marumasa.type_three_rpg.Events;
 
 import marumasa.type_three_rpg.entity.player.Attack;
-import marumasa.type_three_rpg.minecraft;
+import marumasa.type_three_rpg.Minecraft;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 public class AttackEvent {
-    public static double main(LivingEntity attacker, LivingEntity target, double damage, minecraft mc) {
+    public static double main(LivingEntity attacker, LivingEntity target, double damage, Minecraft mc) {
 
 
         //攻撃力を計算

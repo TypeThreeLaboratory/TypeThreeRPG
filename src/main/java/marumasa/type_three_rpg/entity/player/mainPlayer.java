@@ -1,10 +1,10 @@
 package marumasa.type_three_rpg.entity.player;
 
-import marumasa.type_three_rpg.minecraft;
+import marumasa.type_three_rpg.Minecraft;
 import org.bukkit.entity.Player;
 
 public class mainPlayer {
-    public static void setSkillSlot(Player player, minecraft mc) {
+    public static void setSkillSlot(Player player, Minecraft mc) {
 
 
         /*final ItemStack itemStack = new ItemStack(Material.STRUCTURE_VOID);

@@ -1,6 +1,6 @@
 package marumasa.type_three_rpg.item;
 
-import marumasa.type_three_rpg.minecraft;
+import marumasa.type_three_rpg.Minecraft;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UpdateInventory extends BukkitRunnable {
-    private minecraft mc;
+    private Minecraft mc;
     List<Component> list = new ArrayList<>(List.of(Component.text("§fプログラムが付与されたアイテム")));
 
     private final SmithingInventory smithingInventory;

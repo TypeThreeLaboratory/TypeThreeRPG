@@ -1,21 +1,7 @@
 package marumasa.type_three_rpg.entity.dripstone_zombie;
 
-import marumasa.type_three_rpg.database;
-import marumasa.type_three_rpg.entity.EntityData;
-import marumasa.type_three_rpg.minecraft;
-import org.bukkit.Material;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Zombie;
-import org.bukkit.inventory.EntityEquipment;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-
-import java.util.Random;
-
-public class dripstone_zombie extends EntityData {
-    public dripstone_zombie(Entity entity) {
+public class dripstone_zombie {
+    /*public dripstone_zombie(Entity entity) {
         super(entity);
     }
 
@@ -67,5 +53,5 @@ public class dripstone_zombie extends EntityData {
         if (entityData == null) return;
 
         entityData.setPowerAttackPoint(0);
-    }
+    }*/
 }

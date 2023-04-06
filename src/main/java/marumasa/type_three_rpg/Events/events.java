@@ -2,17 +2,16 @@ package marumasa.type_three_rpg.Events;
 
 import com.github.yannicklamprecht.worldborder.api.WorldBorderApi;
 import io.papermc.paper.event.player.PlayerArmSwingEvent;
+import marumasa.type_three_rpg.Minecraft;
 import marumasa.type_three_rpg.config.Config;
 import marumasa.type_three_rpg.database;
-import marumasa.type_three_rpg.entity.PowerAttack;
-import marumasa.type_three_rpg.entity.base;
+import marumasa.type_three_rpg.entity.base.EntityBase;
 import marumasa.type_three_rpg.entity.player.MenuOpen;
 import marumasa.type_three_rpg.entity.player.PlayerData;
 import marumasa.type_three_rpg.entity.player.UpdateRedScreen;
 import marumasa.type_three_rpg.entity.player.mainPlayer;
 import marumasa.type_three_rpg.entity.target_dummy;
 import marumasa.type_three_rpg.item.UpdateInventory;
-import marumasa.type_three_rpg.minecraft;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.*;
@@ -31,20 +30,27 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.SmithingInventory;
 
 import java.util.Objects;
-import java.util.Set;
 import java.util.logging.Logger;
 
 public class events implements Listener {
 
     private final Logger logger = Bukkit.getLogger();
-    private final minecraft mc;
+    private final Minecraft mc;
     private final Config cfg;
     private final WorldBorderApi worldBorderApi;
 
-    public events(Config config, minecraft data, WorldBorderApi worldBorderAPI) {
+    public events(Config config, Minecraft data, WorldBorderApi worldBorderAPI) {
         mc = data;
         cfg = config;
         worldBorderApi = worldBorderAPI;
+    }
+
+    @EventHandler
+    public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+        //エンティティによってエンティティがダメージを受けたら
+
+        final EntityBase base = database.EntityBaseList.get(event.getDamager());
+        if (base != null) base.attack();
     }
 
     @EventHandler
@@ -98,14 +104,11 @@ public class events implements Listener {
     @EventHandler
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
         //プレイヤーがエンティティに向かって使用ボタンを押した場合
-
     }
 
     @EventHandler
     public void onPlayerInteractEntity(PlayerArmSwingEvent event) {
         //プレイヤーが腕を振った場合
-
-        //Attack.EvasiveSlash(event.getPlayer(), mc);
     }
 
     @EventHandler
@@ -128,61 +131,31 @@ public class events implements Listener {
         //エンティティがロードされたら
         for (Entity entity : event.getEntities()) {
             if (entity instanceof LivingEntity livingEntity) {
-                if (livingEntity instanceof Zombie zombie) {
-                    final String name = zombie.getName();
-                    if (name.contains("鍾乳石ゾンビ")) {
-                        //Meta.get(livingEntity, mc, "Type", "鍾乳石ゾンビ");
-                    }
+                if (livingEntity instanceof Husk husk) {
+                    database.EntityBaseList.put(husk, new target_dummy(husk, mc));
                 }
             }
-            remove(entity);
-
         }
     }
 
-    private PlayerData getPlayerData(Player player) {
-        final PlayerData playerData = database.PlayerDataList.get(player);
-        if (playerData.role == null) return null;
-        return playerData;
-    }
-
-    private void remove(Entity entity) {
-        final Set<String> tags = entity.getScoreboardTags();
-        for (final String tag : tags)
-            switch (tag) {
-                case "HealthBar", "DamageDisplay" -> {
-                    entity.remove();
-                    return;
-                }
-                default -> {
-                }
-            }
-    }
-
     @EventHandler
-    public void onEntityLoad(EntitiesUnloadEvent event) {
+    public void onEntityUnload(EntitiesUnloadEvent event) {
         //エンティティがアンロードされたら
         for (Entity entity : event.getEntities()) {
-            remove(entity);
+            EntityBase entityBase = database.EntityBaseList.get(entity);
+            if (entityBase != null) {
+                entityBase.remove();
+                database.EntityBaseList.remove(entity);
+            }
         }
     }
 
     @EventHandler
     public void onEntitySpawn(EntitySpawnEvent event) {
         //エンティティがスポーンしたら
-        if (event.getEntity() instanceof LivingEntity livingEntity) {
-            if (livingEntity instanceof Zombie zombie) {
-                final String name = zombie.getName();
-                if (name.contains("鍾乳石ゾンビ")) {
-                    logger.info("test");
-                    //Meta.get(livingEntity, mc, "Type", "鍾乳石ゾンビ");
-                }
-            }
-            if (livingEntity instanceof Husk husk) {
-                //new base(husk, 1, 2, mc);
-                new target_dummy(husk, 1, 2, mc);
-                logger.info("test2");
-            }
+
+        if (event.getEntity() instanceof Husk husk) {
+            database.EntityBaseList.put(husk, new target_dummy(husk, mc));
         }
     }
 
@@ -225,49 +198,32 @@ public class events implements Listener {
 
     @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {
-        //エンティティがダメージを受けたら
-        if (event.getEntity() instanceof LivingEntity livingEntity) {
 
-            //ダメージを受けたエンティティがプレイヤーだったら
-            if (livingEntity instanceof Player player) {
-
-                //レッドスクリーンを更新
-                if (!database.ShowRedScreenPlayerList.containsKey(player)) {
-                    new UpdateRedScreen(player, worldBorderApi, mc).runTaskTimer(mc, 0, 30);
-                }
-            }
-        }
+        final EntityBase base = database.EntityBaseList.get(event.getEntity());
+        if (base != null) base.damage();
     }
 
     @EventHandler
-    public void onEntityDeath(PlayerItemDamageEvent event) {
+    public void onEntityDeath(EntityDeathEvent event) {
         //エンティティがダメージを受けたら
+        final Entity entity = event.getEntity();
 
-        //event.setDeathMessage("");
-
+        final EntityBase base = database.EntityBaseList.get(entity);
+        if (base != null) {
+            base.remove();
+            database.EntityBaseList.remove(entity);
+        }
     }
 
     @EventHandler
     public void onPluginEnable(PluginEnableEvent event) {
         //エンティティがダメージを受けたら
 
-        //event.setDeathMessage("");
-
     }
 
     @EventHandler
     public void onEntityRegainHealth(EntityRegainHealthEvent event) {
         //エンティティの体力が回復したら
-
-        //体力が回復したエンティティがプレイヤーだったら
-        if (event.getEntity() instanceof Player player) {
-
-
-            //レッドスクリーンを更新
-            if (!database.ShowRedScreenPlayerList.containsKey(player)) {
-                new UpdateRedScreen(player, worldBorderApi, mc).runTaskTimer(mc, 0, 30);
-            }
-        }
     }
 
     @EventHandler
@@ -281,66 +237,6 @@ public class events implements Listener {
         final ItemStack itemStack = event.getItemDrop().getItemStack();
         if (itemStack.getType() == Material.BOOK) {
             event.setCancelled(true);
-        }
-
-        /*final PlayerInventory inventory = player.getInventory();
-        final int slot = inventory.getHeldItemSlot();
-
-        logger.info(String.valueOf(slot));
-
-        final ItemStack itemStack = event.getItemDrop().getItemStack();
-
-        if (inventory.getItemInMainHand() != itemStack) {
-            logger.info(player.getName() + "はハッククライアントを使用しています");
-        } else if (slot == 6 || slot == 7 || slot == 8) {
-        }*/
-
-        //event.setCancelled(true);
-    }
-
-    @EventHandler
-    public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-        //エンティティによってエンティティがダメージを受けたら
-
-        //攻撃されたエンティティが生きているエンティティだったら
-        if (event.getEntity() instanceof LivingEntity livingTarget) {
-            double AttackDamage = event.getDamage();
-
-            /*Random random = new Random();
-            int randomValue = random.nextInt(100);
-            if (randomValue + 100 / Meta.get(livingTarget, mc, "StatusEffect", new StatusEffect()).EvasionUp)
-                event.setCancelled(true);*/
-
-            //攻撃したエンティティが生きているエンティティだったら
-            if (event.getDamager() instanceof LivingEntity livingAttacker) {
-
-                //強攻撃ポイント追加
-                PowerAttack.add(livingTarget, 2);
-
-                AttackDamage = AttackEvent.main(livingAttacker, livingTarget, AttackDamage, mc);
-
-                /*
-                //攻撃したエンティティの種類を取得
-                final String TypeA = Meta.get(livingAttacker, mc, "Type", "");
-
-                //もし攻撃したエンティティの種類が鍾乳石ゾンビだったら
-                if (Objects.equals(TypeA, "鍾乳石ゾンビ")) {
-                    dripstone_zombie.Attack(livingTarget, (Zombie) livingAttacker, mc);
-                }
-
-                //攻撃されたエンティティの種類を取得
-                final String TypeT = Meta.get(livingTarget, mc, "Type", "");
-
-                //もし攻撃されたエンティティの種類が鍾乳石ゾンビだったら
-                if (Objects.equals(TypeT, "鍾乳石ゾンビ")) {
-                    dripstone_zombie.Damage((Zombie) livingTarget, mc);
-                }*/
-                event.setDamage(AttackDamage);
-            }
-        }
-        final LivingEntity entity = database.EntityDamageLink.get(event.getEntity());
-        if (entity != null) {
-            ((Player) event.getDamager()).attack(entity);
         }
     }
 }

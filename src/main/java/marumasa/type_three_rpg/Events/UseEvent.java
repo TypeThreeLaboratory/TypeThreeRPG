@@ -1,6 +1,6 @@
 package marumasa.type_three_rpg.Events;
 
-import marumasa.type_three_rpg.minecraft;
+import marumasa.type_three_rpg.Minecraft;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -12,7 +12,7 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class UseEvent {
-    public static void main(Player player, minecraft mc) {
+    public static void main(Player player, Minecraft mc) {
 
         final PlayerInventory inventory = player.getInventory();
         ItemStack itemStack = inventory.getItemInOffHand();
