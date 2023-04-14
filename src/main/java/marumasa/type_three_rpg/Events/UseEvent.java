@@ -10,8 +10,18 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class UseEvent {
+
+
+    private static final List<String> LoreBase = new ArrayList<>(Arrays.asList("", ""));
+
     public static void main(Player player, Minecraft mc) {
 
         final PlayerInventory inventory = player.getInventory();
@@ -66,6 +76,30 @@ public class UseEvent {
                     }
                 }
             }
+        } else if (itemStack.getType() == Material.STONE_SWORD) {
+
+            ItemMeta meta = itemStack.getItemMeta();
+            List<Component> lore = meta.lore();
+            if (lore == null) return;
+
+            final List<String> stringLore = new ArrayList<>();
+            for (Component component : lore) {
+                stringLore.add(component.toString());
+            }
+
+            if (stringLore == LoreBase) {
+                use(player);
+            }
+
         }
+
+    }
+
+    public static void use(Player player) {
+        player.addPotionEffect(new PotionEffect(
+                PotionEffectType.SPEED,
+                20,
+                0
+        ));
     }
 }

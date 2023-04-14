@@ -11,6 +11,7 @@ import marumasa.type_three_rpg.entity.player.PlayerData;
 import marumasa.type_three_rpg.entity.player.UpdateRedScreen;
 import marumasa.type_three_rpg.entity.player.mainPlayer;
 import marumasa.type_three_rpg.entity.target_dummy;
+import marumasa.type_three_rpg.item.ItemBase;
 import marumasa.type_three_rpg.item.UpdateInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -57,6 +58,7 @@ public class events implements Listener {
     public void onInventoryClick(InventoryClickEvent event) {
         //インベントリをクリックしたら
 
+        logger.info("c");
         if (event.getView().getPlayer() instanceof Player player) {
             final Inventory inventory = event.getClickedInventory();
             if (inventory == null) return;
@@ -67,13 +69,15 @@ public class events implements Listener {
                     event.setCancelled(true);
 
                     new MenuOpen(player).runTaskLater(mc, 0);
-                    return;
                 }
-            }
+            } else if (event.isLeftClick())
+                if (inventory instanceof SmithingInventory smithingInventory) {
+                    new UpdateInventory(smithingInventory).runTaskLater(mc, 0);
+                }
 
 
             //--------------------------
-            final int slot = event.getSlot();
+            /*final int slot = event.getSlot();
 
             final ItemStack itemStack = inventory.getItem(slot);
 
@@ -82,22 +86,23 @@ public class events implements Listener {
                 if (event.isRightClick()) {
                     event.setCancelled(true);
                 }
-            }
+            }*/
 
 
-            if (event.isLeftClick())
-                if (inventory instanceof SmithingInventory smithingInventory) {
-                    new UpdateInventory(smithingInventory).runTaskLater(mc, 0);
-                }
         }
     }
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
 
+        final ItemStack itemStack = event.getItem();
+        if (itemStack == null) return;
+
+
         //プレイヤーがオブジェクトまたは空気に向かって使用ボタンを押したら
         if (event.getAction().isRightClick()) {
-            UseEvent.main(event.getPlayer(), mc);
+
+            ItemBase.UseEvent(itemStack, event.getPlayer(), mc);
         }
     }
 
